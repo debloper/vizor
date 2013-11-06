@@ -13,12 +13,10 @@ vinci.output = function (data) {
   } catch (e) {
     data = data
   }
-  return JSON.stringify(data)
+  return JSON.stringify(data, null, "\t")
 }
 
 // Give output
 document.querySelector("button").addEventListener("click", function () {
-  console.log(
-    vinci.output(vinci.input())
-  )
+  document.querySelector("pre").innerHTML = vinci.output(vinci.input())
 }, false)

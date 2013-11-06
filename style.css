@@ -1,0 +1,73 @@
+@charset "utf-8";
+
+/**
+ * Stylesheet Index:
+ * =================
+ *
+ * 0. Elements
+ * 1. ID & Class
+ * 2. Pseudoclass
+ * 3. Media Queries
+ */
+
+/* 0. Elements */
+* {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+html { font-size: 16px; }
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: #ddd;
+  min-width: 320px;
+  font-family: Sans-serif;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+a {
+  color:
+  outline: 0;
+  text-decoration: none;
+}
+section {
+  width: 640px;
+  margin: 2rem auto;
+}
+section > * {
+  width: 100%;
+  display: block;
+  border: 1px solid #aaa;
+}
+textarea {
+  height: 10rem;
+  padding: 1rem;
+}
+button {
+  padding: 1rem;
+  font-size: 2rem;
+  margin-top: -2px;
+  background: linear-gradient(#eee, #ddd);
+}
+code {
+  margin-top: 1rem;
+}
+pre {
+  margin: 0;
+  padding: 1rem;
+  background: #f8f8f8;
+  white-space: pre-wrap;
+}
+
+/* 1. ID & Class */
+
+/* 2. Pseudoclass */
+button:hover {
+  background: linear-gradient(#ddd, #ccc);
+}
+button:active {
+  background: linear-gradient(#ddd, #eee);
+}
+
+/* 3. Media Queries */
