@@ -20,7 +20,7 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
-  background: #ddd;
+  background: #e0e0e0;
   min-width: 320px;
   font-family: Sans-serif;
   -webkit-transform: translateZ(0);
@@ -43,6 +43,7 @@ section > * {
 textarea {
   height: 10rem;
   padding: 1rem;
+  resize: vertical;
 }
 button {
   padding: 1rem;
