@@ -62,6 +62,11 @@ pre {
 }
 
 /* 1. ID & Class */
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 2px;
+}
 
 /* 2. Pseudoclass */
 button:hover {
