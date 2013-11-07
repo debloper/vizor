@@ -25,12 +25,18 @@ vinci.output = function (data) {
   try {
     data = JSON.parse(data)
   } catch (e) {
-    data = data
+    data = false
+    return data
   }
   return JSON.stringify(data, null, "\t")
 }
 
 // Give output
 document.querySelector("button").addEventListener("click", function () {
-  document.querySelector("pre").innerHTML = vinci.output(vinci.input())
+  var data = vinci.output(vinci.input())
+  if (data) {
+    document.querySelector("pre").innerHTML = data
+  } else {
+    document.querySelector("pre").innerHTML = "Input could not be parsed as JSON"
+  }
 }, false)
