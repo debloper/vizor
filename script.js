@@ -40,7 +40,20 @@ document.querySelector("button").addEventListener("click", function () {
 
     for (var i in data) {
       var tmp = {
-        name: i
+        name: i,
+        children: (function () {
+          var arr = []
+          for (var j in data[i]) {
+            arr.push({
+              "name": (function () {
+                var tmp = data[i][j].split("-")
+                tmp.pop()
+                return tmp.join("-")
+              })()
+            })
+          }
+          return arr
+        })()
       }
       delete data[i]
       payload.push(tmp)
@@ -49,12 +62,12 @@ document.querySelector("button").addEventListener("click", function () {
     data.name = "Viz"
     data.children = payload
 
-    document.querySelector("pre").innerHTML = JSON.stringify(data, null, "\t")
+    document.querySelector("pre").innerHTML = JSON.stringify(data, null, "  ")
 
-    var tree = d3.layout.tree().size([300,150])
+    var tree = d3.layout.tree().size([2000,250])
       , svg = d3.select("#viz").append("svg")
                 .attr("width", 640)
-                .attr("height", 640)
+                .attr("height", 2048)
                 .append("g")
                 .attr("transform", "translate(40, 0)")
 
