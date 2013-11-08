@@ -11,7 +11,7 @@
 	<title>Da Vinci.</title>
 
 	<!-- And favicon -->
-	<!--link rel="icon" type="image/png" href="data:image/png;base64, foobar" /-->
+	<!--link rel="icon" type="image/png" href="data:image/png;base64, foo" /-->
 
 	<!-- Style sheets -->
 	<link rel="stylesheet" href="style.css" />
@@ -29,7 +29,7 @@
 <body>
 
 	<section>
-		<textarea></textarea>
+		<textarea placeholder='{"foo": 123, "bar": null}'></textarea>
 		<button>Process</button>
 		<code>
 			<pre>Type-in (or Drag-n-Drop) JSON, and press the button!</pre>
@@ -38,8 +38,9 @@
 	</section>
 
 	<!-- Lazy Loadable JS -->
-	<script src="script.js"></script>
 	<script src="http://d3js.org/d3.v3.js"></script>
+	<script src="vinci.js"></script>
+	<script src="script.js"></script>
 
 </body>
 

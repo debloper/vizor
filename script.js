@@ -1,11 +1,4 @@
-// Housekeeping
-var vinci = {}
-
-// Get input
-vinci.input = function () {
-  return document.querySelector("textarea").value
-}
-
+// Event listener to handle file drag-n-drop in the input field
 document.querySelector("textarea").addEventListener("drop", function (event) {
   event.preventDefault()
 
@@ -19,81 +12,24 @@ document.querySelector("textarea").addEventListener("drop", function (event) {
   reader.readAsText(file)
 }, false)
 
-
-// Process data
-vinci.output = function (data) {
-  try {
-    data = JSON.parse(data)
-  } catch (e) {
-    data = false
-  }
-  return data
-}
-
-// Give output
+// Here's what rigs the big-red-button - well, not red - but you get the point.
 document.querySelector("button").addEventListener("click", function () {
-  var data = vinci.output(vinci.input())
 
-  if (data) {
+  // First get the input & read it
+  var data = (function () {
+    var input = document.querySelector("textarea").value
 
-    var payload = []
-
-    for (var i in data) {
-      var tmp = {
-        name: i,
-        children: (function () {
-          var arr = []
-          for (var j in data[i]) {
-            arr.push({
-              "name": (function () {
-                var tmp = data[i][j].split("-")
-                tmp.pop()
-                return tmp.join("-")
-              })()
-            })
-          }
-          return arr
-        })()
-      }
-      delete data[i]
-      payload.push(tmp)
+    try {
+      input = JSON.parse(input)
+    } catch (e) {
+      input = false
     }
+    return input
+  })()
 
-    data.name = "Viz"
-    data.children = payload
-
-    document.querySelector("pre").innerHTML = JSON.stringify(data, null, "  ")
-
-    var tree = d3.layout.tree().size([2000,250])
-      , svg = d3.select("#viz").append("svg")
-                .attr("width", 640)
-                .attr("height", 2048)
-                .append("g")
-                .attr("transform", "translate(40, 0)")
-
-      , diagonal = d3.svg.diagonal()
-                    .projection(function(d) { return [d.y, d.x] })
-
-      , nodes = tree.nodes(data)
-
-      , links = tree.links(nodes)
-
-      , link = svg.selectAll("pathlink")
-                    .data(links).enter().append("path")
-                    .attr("class", "link").attr("d", diagonal)
-
-      , node = svg.selectAll("g.node")
-                    .data(nodes).enter().append("g")
-                    .attr("transform", function(d) {
-                      return "translate(" + d.y + "," + d.x + ")"
-                    })
-
-      node.append("circle").attr("r", 3.5)
-      node.append("text")
-          .attr("dx", function(d) { return d.children ? -8 : 8 })
-          .attr("dy", 3)
-          .attr("text-anchor", function(d) { return d.children ? "end" : "start" })
-          .text(function(d) { return d.name })
+  // If the input is valid, generate visualization - else give error message
+  if (data) {
+    vinci.draw(data, "#viz")
   } else {
     document.querySelector("pre").innerHTML = "Input could not be parsed as JSON"
   }
