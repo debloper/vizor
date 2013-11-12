@@ -1,44 +1,37 @@
 // The global namespace for the library
 var vinci = {}
 
+// Needs to be generalized, supporting currying
+vinci.trace = function (payload) {
+
+  var warhead = []
+
+  for (var i in payload) {
+    if (typeof payload === "object") {
+      warhead.push({
+        name: i,
+        children: (function () {
+          if (typeof payload[i] !== "object")
+            return [{ name: payload[i] }]
+          return vinci.trace(payload[i])
+        })()
+      })
+    } else {
+      warhead.push({ name: payload[i] })
+    }
+  }
+  return warhead
+}
+
 // The primitive to process input-data in a certain way
 // @TODO: Syntactic sugar to be added, using templates
-vinci.draw = function (data, node, template) {
+vinci.draw = function (payload, node, template) {
 
-  // The temporary object to be packed in to data
-  var payload = []
-
-  // FUBAR the given data to comply with the template
-  for (var i in data) {
-    var tmp = {
-
-      // @TODO: Needs recursion for n-th level objects
-      name: i,
-      children: (function () {
-        var arr = []
-        for (var j in data[i]) {
-          arr.push({
-            "name": (function () {
-              var tmp = data[i][j].split("-")
-              tmp.pop()
-              return tmp.join("-")
-            })()
-          })
-        }
-        return arr
-      })()
-    }
-
-    // Once dealt with a key-value, remove original
-    delete data[i]
-
-    // Constuct/populate the payload
-    payload.push(tmp)
+  // Construct the root-object for the Visualization
+  var data = {
+    name: "Viz",
+    children: vinci.trace(payload)
   }
-
-  // Process the root-object for the Visualization
-  data.name = "Viz"
-  data.children = payload
 
   // Show the processed data-structure
   document.querySelector("pre").innerHTML = JSON.stringify(data, null, "  ")
