@@ -1,6 +1,31 @@
 // The global namespace for the library
 var vinci = {}
 
+// A general purpose object analyzer
+vinci.probe = function (payload) {
+  var report = {}
+
+  // Get the JSON-size; i.e. how big the input data is:
+  report.size = JSON.stringify(payload).length
+
+  // Measure the stats of chilren nodes in the object
+  report.nodes = {}
+
+  // Get the total number of chilren nodes in the object
+  var count = 0
+  report.nodes.count = (function recurse (payload) {
+    count += Object.keys(payload).length
+    for (var i in payload) {
+      console.log(payload[i])
+      if (typeof payload[i] === "object")
+        recurse(payload[i])
+    }
+    return count
+  })(payload)
+
+  return report
+}
+
 // Needs to be generalized, supporting currying
 vinci.trace = function (payload) {
 
@@ -25,12 +50,12 @@ vinci.trace = function (payload) {
 
 // The primitive to process input-data in a certain way
 // @TODO: Syntactic sugar to be added, using templates
-vinci.draw = function (payload, node, template) {
+vinci.draw = function (input, node, template) {
 
   // Construct the root-object for the Visualization
   var data = {
     name: "Viz",
-    children: vinci.trace(payload)
+    children: vinci.trace(input)
   }
 
   // Show the processed data-structure

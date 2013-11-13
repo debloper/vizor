@@ -30,6 +30,7 @@ document.querySelector("button").addEventListener("click", function () {
   // If the input is valid, generate visualization - else give error message
   if (data) {
     vinci.draw(data, "#viz")
+    document.querySelector("pre").innerHTML += JSON.stringify(vinci.probe(data))
   } else {
     document.querySelector("pre").innerHTML = "Input could not be parsed as JSON"
   }
