@@ -2,50 +2,49 @@
 var vinci = {}
 
 // A general purpose object analyzer
-vinci.probe = function (payload) {
+vinci.probe = function (data) {
   var report = {}
 
   // Get the JSON-size; i.e. how big the input data is:
-  report.size = JSON.stringify(payload).length
+  report.size = JSON.stringify(data).length
 
   // Measure the stats of chilren nodes in the object
   report.nodes = {}
 
   // Get the total number of chilren nodes in the object
   var count = 0
-  report.nodes.count = (function recurse (payload) {
-    count += Object.keys(payload).length
-    for (var i in payload) {
-      console.log(payload[i])
-      if (typeof payload[i] === "object")
-        recurse(payload[i])
+  report.nodes.count = (function recurse (data) {
+    count += Object.keys(data).length
+    for (var i in data) {
+      if (typeof data[i] === "object")
+        recurse(data[i])
     }
     return count
-  })(payload)
+  })(data)
 
   return report
 }
 
 // Needs to be generalized, supporting currying
-vinci.trace = function (payload) {
+vinci.trace = function (data) {
 
-  var warhead = []
+  var payload = []
 
-  for (var i in payload) {
-    if (typeof payload === "object") {
-      warhead.push({
+  for (var i in data) {
+    if (typeof data === "object") {
+      payload.push({
         name: i,
         children: (function () {
-          if (typeof payload[i] !== "object")
-            return [{ name: payload[i] }]
-          return vinci.trace(payload[i])
+          if (typeof data[i] !== "object")
+            return [{ name: data[i] }]
+          return vinci.trace(data[i])
         })()
       })
     } else {
-      warhead.push({ name: payload[i] })
+      payload.push({ name: data[i] })
     }
   }
-  return warhead
+  return payload
 }
 
 // The primitive to process input-data in a certain way
@@ -53,13 +52,10 @@ vinci.trace = function (payload) {
 vinci.draw = function (input, node, template) {
 
   // Construct the root-object for the Visualization
-  var data = {
+  var root = {
     name: "Viz",
     children: vinci.trace(input)
   }
-
-  // Show the processed data-structure
-  document.querySelector("pre").innerHTML = JSON.stringify(data, null, "  ")
 
   // The creation of visualization goes here-on
   var tree = d3.layout.tree().size([1000,250])
@@ -72,7 +68,7 @@ vinci.draw = function (input, node, template) {
     , diagonal = d3.svg.diagonal()
                    .projection(function (d) { return [d.y, d.x] })
 
-    , nodes = tree.nodes(data)
+    , nodes = tree.nodes(root)
 
     , links = tree.links(nodes)
 
