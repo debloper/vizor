@@ -1,3 +1,15 @@
+// Some primitive methods, to ease up stuffs
+var getInput = function () {
+  var input = document.querySelector("textarea").value
+
+  try {
+    input = JSON.parse(input)
+  } catch (e) {
+    input = false
+  }
+  return input
+}
+
 // Event listener to handle file drag-n-drop in the input field
 document.querySelector("textarea").addEventListener("drop", function (event) {
   event.preventDefault()
@@ -12,30 +24,51 @@ document.querySelector("textarea").addEventListener("drop", function (event) {
   reader.readAsText(file)
 }, false)
 
-// Here's what rigs the big-red-button - well, not red - but you get the point.
-document.querySelector("button").addEventListener("click", function () {
 
-  // First get the input & read it
-  var data = (function () {
-    var input = document.querySelector("textarea").value
+// Here's what rigs the action-buttons
+// Probe:
+document.getElementById("probe").addEventListener("click", function () {
 
-    try {
-      input = JSON.parse(input)
-    } catch (e) {
-      input = false
-    }
-    return input
-  })()
+  // First get the input & fetch the DOM
+  var data = getInput()
+    , ramp = document.querySelector("pre")
+
+  // If the input is valid, probe the data - else give error message
+  if (data) {
+    ramp.innerHTML = JSON.stringify(vinci.probe(data), null, "  ")
+  } else {
+    ramp.innerHTML = "Input could not be parsed as JSON"
+  }
+}, false)
+
+// Trace:
+document.getElementById("trace").addEventListener("click", function () {
+
+  // First get the input & fetch the DOM
+  var data = getInput()
+    , ramp = document.querySelector("pre")
+
+  // If the input is valid, go ahead with transforming - else give error message
+  if (data) {
+    ramp.innerHTML = JSON.stringify(vinci.trace(data), null, "  ")
+  } else {
+    ramp.innerHTML = "Input could not be parsed as JSON"
+  }
+}, false)
+
+// Draw:
+document.getElementById("draw").addEventListener("click", function () {
+
+  // First get the input & fetch the DOM
+  var data = getInput()
+    , ramp = document.querySelector("pre")
 
   // If the input is valid, generate visualization - else give error message
   if (data) {
-    // Log the data & stats on the notice-board
-    var display = document.querySelector("pre")
-    display.innerHTML = JSON.stringify(vinci.probe(data))
-    display.innerHTML += "\n\n" + JSON.stringify(vinci.trace(data), null, "  ")
-
+    ramp.innerHTML = "Well... it's something!"
+    document.getElementById("viz").innerHTML = ""
     vinci.draw(data, "#viz")
   } else {
-    document.querySelector("pre").innerHTML = "Input could not be parsed as JSON"
+    ramp.innerHTML = "Input could not be parsed as JSON"
   }
 }, false)

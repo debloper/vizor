@@ -45,10 +45,24 @@ textarea {
   padding: 1rem;
   resize: vertical;
 }
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: 1px solid #aaa;
+  margin: -1px 0 1rem;
+  text-align: justify;
+  -ms-text-justify: distribute-all-lines;
+  text-justify: distribute-all-lines;
+}
 button {
+  width: 33.33333333%;
   padding: 1rem;
   font-size: 2rem;
-  margin-top: -2px;
+  margin: -2px 0 0;
+  border: solid #aaa;
+  border-width: 1px 0 0;
+  vertical-align: top;
+  display: inline-block;
   background: linear-gradient(#eee, #ddd);
 }
 code {
@@ -69,11 +83,25 @@ pre {
 }
 
 /* 2. Pseudoclass */
+fieldset:after {
+	width:				100%;
+	height:				0;
+	font-size:			0;
+	line-height:		0;
+	visibility:			hidden;
+	content:			".";
+	display:			block;
+}
 button:hover {
+  color: #111;
   background: linear-gradient(#ddd, #ccc);
 }
 button:active {
+  color: #666;
   background: linear-gradient(#ddd, #eee);
+}
+button:nth-child(2) {
+  border-width: 1px 1px 0;
 }
 
 /* 3. Media Queries */
