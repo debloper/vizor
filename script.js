@@ -35,7 +35,7 @@ document.getElementById("probe").addEventListener("click", function () {
 
   // If the input is valid, probe the data - else give error message
   if (data) {
-    ramp.innerHTML = JSON.stringify(vinci.probe(data), null, "  ")
+    ramp.innerHTML = JSON.stringify(vizor.probe(data), null, "  ")
   } else {
     ramp.innerHTML = "Input could not be parsed as JSON"
   }
@@ -50,7 +50,7 @@ document.getElementById("trace").addEventListener("click", function () {
 
   // If the input is valid, go ahead with transforming - else give error message
   if (data) {
-    ramp.innerHTML = JSON.stringify(vinci.trace(data), null, "  ")
+    ramp.innerHTML = JSON.stringify(vizor.trace(data), null, "  ")
   } else {
     ramp.innerHTML = "Input could not be parsed as JSON"
   }
@@ -67,7 +67,7 @@ document.getElementById("draw").addEventListener("click", function () {
   if (data) {
     ramp.innerHTML = "Well... it's something!"
     document.getElementById("viz").innerHTML = ""
-    vinci.draw(data, "#viz")
+    vizor.draw(data, "#viz")
   } else {
     ramp.innerHTML = "Input could not be parsed as JSON"
   }

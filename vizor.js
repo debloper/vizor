@@ -1,8 +1,8 @@
 // The global namespace for the library
-var vinci = {}
+var vizor = {}
 
 // A general purpose object analyzer
-vinci.probe = function (data) {
+vizor.probe = function (data) {
   var report = {}
 
   // Get the JSON-size; i.e. how big the input data is:
@@ -26,7 +26,7 @@ vinci.probe = function (data) {
 }
 
 // Needs to be generalized, supporting currying
-vinci.trace = function (data) {
+vizor.trace = function (data) {
 
   var payload = []
 
@@ -37,7 +37,7 @@ vinci.trace = function (data) {
         children: (function () {
           if (typeof data[i] !== "object")
             return [{ name: data[i] }]
-          return vinci.trace(data[i])
+          return vizor.trace(data[i])
         })()
       })
     } else {
@@ -49,12 +49,12 @@ vinci.trace = function (data) {
 
 // The primitive to process input-data in a certain way
 // @TODO: Syntactic sugar to be added, using templates
-vinci.draw = function (input, node, template) {
+vizor.draw = function (input, node, template) {
 
   // Construct the root-object for the Visualization
   var root = {
     name: "Viz",
-    children: vinci.trace(input)
+    children: vizor.trace(input)
   }
 
   // The creation of visualization goes here-on
