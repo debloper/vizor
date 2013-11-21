@@ -13,14 +13,26 @@ vizor.probe = function (data) {
 
   // Get the total number of chilren nodes in the object
   var count = 0
-  report.nodes.count = (function recurse (data) {
-    count += Object.keys(data).length
+    , level = 0
+
+  report.nodes.level = []
+  report.nodes.count = (function recurse (data, level) {
+    var keys = Object.keys(data).length
+
+    count += keys
+
+    if (report.nodes.level[level])
+      report.nodes.level[level] += parseInt(keys, 10)
+    else report.nodes.level[level] = parseInt(keys, 10)
+
+    level++
+
     for (var i in data) {
       if (typeof data[i] === "object")
-        recurse(data[i])
+        recurse(data[i], level)
     }
     return count
-  })(data)
+  })(data, level)
 
   return report
 }
