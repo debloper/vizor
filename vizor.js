@@ -11,26 +11,45 @@ vizor.probe = function (data) {
   // Measure the stats of chilren nodes in the object
   report.nodes = {}
 
-  // Get the total number of chilren nodes in the object
+  // Declare the counters with higher-scoping
   var count = 0
     , level = 0
 
+  // Set the per-level hierarchy-data primitive
   report.nodes.level = []
-  report.nodes.count = (function recurse (data, level) {
+
+  // This is impressive - recursion, without namespace pollution
+  report.nodes.total = (function recurse (data, level) {
+
+    // Get the number of children that the object has
     var keys = Object.keys(data).length
 
+    // Update the count - i.e. the _total_ number of nodes
     count += keys
 
+    // IF level information is there - update the cousin-counter
+    // The control is to first start from the else block - if ever
     if (report.nodes.level[level])
-      report.nodes.level[level] += parseInt(keys, 10)
-    else report.nodes.level[level] = parseInt(keys, 10)
+      report.nodes.level[level]["has"] += parseInt(keys, 10)
+    else {
+      // If the level didn't exist, initiate it & push the value
+      report.nodes.level[level] = {
+        "has": parseInt(keys, 10)
+      }
+    }
 
+    // Finally, update the level-counter - for the next level
     level++
 
+    // Analyze whether the input further has children-object
     for (var i in data) {
+
+      // If it does, then recurse; for next level, per sibling
       if (typeof data[i] === "object")
         recurse(data[i], level)
     }
+
+    // Finally, return the sum of nodes present in the object
     return count
   })(data, level)
 
