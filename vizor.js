@@ -53,6 +53,20 @@ vizor.probe = function (data) {
     return count
   })(data, level)
 
+  // Reuse the temp-variable to store reference to levels
+  level = report.nodes.level
+
+  // Post-process the levels' data for average children count
+  for (var i in level) {
+
+    var self = level[i]
+      , child = level[parseInt(i, 10)+1]
+
+    // If next level exists, then give average children per parent
+    if (child)
+      level[i]["par"] = Math.round(child.has / self.has)
+  }
+
   return report
 }
 
