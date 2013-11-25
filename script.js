@@ -67,7 +67,7 @@ document.getElementById("draw").addEventListener("click", function () {
   if (data) {
     ramp.innerHTML = "Well... it's something!"
     document.getElementById("viz").innerHTML = ""
-    vizor.draw(data, "#viz")
+    vizor.draw(data, "#viz", "tree")
   } else {
     ramp.innerHTML = "Input could not be parsed as JSON"
   }
