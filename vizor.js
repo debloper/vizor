@@ -45,7 +45,7 @@ vizor.probe = function (data) {
     for (var i in data) {
 
       // If it does, then recurse; for next level, per sibling
-      if (typeof data[i] === "object")
+      if (typeof data[i] === "object" && data[i] !== null)
         recurse(data[i], level)
     }
 
@@ -131,41 +131,41 @@ vizor.template.tree = function (root, node) {
     , node = svg.selectAll("g.node")
                 .data(nodes)
 
-    var nodeEnter = node.enter().append("g")
-                        .on("click", function (d) {
-                          if (d.kinder) {
-                            d.children = d.kinder
-                            d.kinder = null
-                          } else {
-                            d.kinder = d.children
-                            d.children = null
-                          }
-                          vizor.template.tree(d, "#viz")
-                        })
+  var nodeEnter = node.enter().append("g")
+                      .on("click", function (d) {
+                        if (d.kinder) {
+                          d.children = d.kinder
+                          d.kinder = null
+                        } else {
+                          d.kinder = d.children
+                          d.children = null
+                        }
+                        vizor.template.tree(d, "#viz")
+                      })
 
-    nodeEnter.append("circle")
-            .attr("r", 4.5)
-            .style("fill", "transparent")
-            .style("stroke", function(d) {
-              return d.kinder ? "#900" : "#333"
-            })
+  nodeEnter.append("circle")
+          .attr("r", 4.5)
+          .style("fill", "transparent")
+          .style("stroke", function(d) {
+            return d.kinder ? "#900" : "#333"
+          })
 
-    nodeEnter.append("text")
-            .attr("dx", function (d) {
-              return d.children ? -12 : 12
-            })
-            .attr("dy", 5)
-            .attr("text-anchor", function (d) {
-              return d.children ? "end" : "start"
-            })
-            .text(function (d) { return d.name })
+  nodeEnter.append("text")
+          .attr("dx", function (d) {
+            return d.children ? -12 : 12
+          })
+          .attr("dy", 5)
+          .attr("text-anchor", function (d) {
+            return d.children ? "end" : "start"
+          })
+          .text(function (d) { return d.name })
 
-    node.transition().attr("transform", function (d) {
-      return "translate(" + d.y + "," + d.x + ")"
-    })
-    node.exit().transition().remove();
+  node.transition().attr("transform", function (d) {
+    return "translate(" + d.y + "," + d.x + ")"
+  })
+  node.exit().transition().remove();
 
-    link.enter().insert("path", "g").attr("class", "link")
-    link.transition().attr("d", diagonal)
-    link.exit().transition().remove()
+  link.enter().insert("path", "g").attr("class", "link")
+  link.transition().attr("d", diagonal)
+  link.exit().transition().remove()
 }
